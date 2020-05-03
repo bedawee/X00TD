@@ -1755,6 +1755,7 @@ static int mdss_fb_pm_resume(struct device *dev)
 		if (g_resume_from_fp && mfd->index == 0) {
 			if (!mfd->early_unblank_work_queued) {
 				pr_err("[Display] doing unblank from resume, due to fp.\n");
+				input_boost_max_kick(1000);
 				mfd->early_unblank_work_queued = true;
                 queue_delayed_work(asus_lcd_early_unblank_wq, &mfd->early_unblank_work, 0);
 			} else {
