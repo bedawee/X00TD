@@ -1610,6 +1610,7 @@ static int nl80211_send_wiphy(struct cfg80211_registered_device *rdev,
 					NL80211_FEATURE_SUPPORTS_WMM_ADMISSION)
 				CMD(add_tx_ts, ADD_TX_TS);
 			CMD(update_connect_params, UPDATE_CONNECT_PARAMS);
+			CMD(update_ft_ies, UPDATE_FT_IES);
 		}
 		/* add into the if now */
 #undef CMD
@@ -3196,6 +3197,9 @@ static int nl80211_del_key(struct sk_buff *skb, struct genl_info *info)
 	err = nl80211_parse_key(info, &key);
 	if (err)
 		return err;
+
+	if (key.idx < 0)
+		return -EINVAL;
 
 	if (info->attrs[NL80211_ATTR_MAC])
 		mac_addr = nla_data(info->attrs[NL80211_ATTR_MAC]);
