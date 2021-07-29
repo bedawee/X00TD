@@ -152,7 +152,7 @@ static void do_input_boost(struct work_struct *work)
 					msecs_to_jiffies(IB_DURATION));
 }
 
-void mdss_boost_kick()
+void mdss_boost_kick(void)
 {
 	if (work_pending(&input_boost_work)
 				|| time_after(jiffies, last_input_time + msecs_to_jiffies(MDSS_TIMEOUT))) {
