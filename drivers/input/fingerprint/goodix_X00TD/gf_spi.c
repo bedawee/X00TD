@@ -42,6 +42,7 @@
 #include <linux/cpufreq.h>
 #include <linux/wakelock.h>
 #include "gf_spi.h"
+#include <linux/devfreq_boost.h>
 
 #include "../common_X00TD/fingerprint_common.h"
 
@@ -493,6 +494,7 @@ static irqreturn_t gf_irq(int irq, void *handle)
 {
 #if defined(GF_NETLINK_ENABLE)
 	char temp = GF_NET_EVENT_IRQ;
+	devfreq_boost_kick_max(DEVFREQ_MSM_CPUBW, 1000);
 	wake_lock_timeout(&fp_wakelock, msecs_to_jiffies(WAKELOCK_HOLD_TIME));
 	sendnlmsg(&temp);
 #elif defined (GF_FASYNC)

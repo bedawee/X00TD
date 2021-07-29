@@ -52,6 +52,7 @@
 #include <sync.h>
 #include <sw_sync.h>
 #include <linux/cpu_boost.h>
+#include <linux/devfreq_boost.h>
 
 #include "mdss_fb.h"
 #include "mdss_mdp_splash_logo.h"
@@ -1756,6 +1757,7 @@ static int mdss_fb_pm_resume(struct device *dev)
 			if (!mfd->early_unblank_work_queued) {
 				pr_err("[Display] doing unblank from resume, due to fp.\n");
 				input_boost_max_kick(1000);
+				devfreq_boost_kick_max(DEVFREQ_MSM_CPUBW, 1000);
 				mfd->early_unblank_work_queued = true;
                 queue_delayed_work(asus_lcd_early_unblank_wq, &mfd->early_unblank_work, 0);
 			} else {
@@ -5192,6 +5194,7 @@ int mdss_fb_do_ioctl(struct fb_info *info, unsigned int cmd,
 		break;
 	case MSMFB_ATOMIC_COMMIT:
 		mdss_boost_kick();
+		devfreq_mdss_boost_kick(DEVFREQ_MSM_CPUBW);
 		ret = mdss_fb_atomic_commit_ioctl(info, argp, file);
 		break;
 
